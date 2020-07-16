@@ -1,6 +1,38 @@
-##loading dataset:
+#plot1
+#loading dataset
 pc <- read.table("household_power_consumption.txt", skip=1, sep=";")
 names(pc) <- c("Date", "Time", "Global_active_power", "Global_reactive_power", "Voltage", "Global_intensity", "Sub_metering_1", "Sub_metering_2", "Sub_metering_3")
 spc <- subset(pc, pc$Date == "1/2/2007" | pc$Date == "2/2/2007")
 #calling the function:
 hist(as.numeric(as.character(spc$Global_active_power)), col="red", main="Global Active Power", xlab="Global Active Power(kilowatts)")
+
+#plot2
+#loading dataset
+pc <- read.table("household_power_consumption.txt", skip=1, sep=";")
+names(pc) <- c("Date", "Time", "Global_active_power", "Global_reactive_power", "Voltage", "Global_intensity", "Sub_metering_1", "Sub_metering_2", "Sub_metering_3")
+spc <- subset(pc, pc$Date == "1/2/2007" | pc$Date == "2/2/2007")
+#changing date and time variables
+spc$Date <- as.Date(spc$Date, format = "%d/%m/%Y")
+spc$Time <- strptime(spc$Time, format = "%H:%M:%S")
+spc[1:1440,"Time"] <- format(spc[1:1440, "Time"],"2007-02-01 %H:%M:%S")
+spc[1441:2880,"Time"] <- format(spc[1441:2880, "Time"],"2007-02-02 %H:%M:%S")
+#calling the function:
+plot(spc$Time,as.numeric(as.character(spc$Global_active_power)), type = "l",xlab = "",ylab = "Global Active Power (kilowatts)")
+
+#plot3
+pc <- read.table("household_power_consumption.txt", skip=1, sep=";")
+names(pc) <- c("Date", "Time", "Global_active_power", "Global_reactive_power", "Voltage", "Global_intensity", "Sub_metering_1", "Sub_metering_2", "Sub_metering_3")
+spc <- subset(pc, pc$Date == "1/2/2007" | pc$Date == "2/2/2007")
+#changing date and time variables
+spc$Date <- as.Date(spc$Date, format = "%d/%m/%Y")
+spc$Time <- strptime(spc$Time, format = "%H:%M:%S")
+spc[1:1440, "Time"] <- format(spc[1:1440, "Time"], "2007-02-01 %H:%M:%S")
+spc[1441:2880, "Time"] <- format(spc[1441:2880, "Time"], "2007-02-02 %H:%M:%S")
+#calling the function:
+plot(spc$Time, subpower_con$Sub_metering_1, type= "n", xlab= "", ylab = "Energy sub metering")
+with(spc, lines(Time, as.numeric(as.character(Sub_metering_1))))
+with(spc, lines(Time, as.numeric(as.character(Sub_metering_2)),col="red"))
+with(spc, lines(Time, as.numeric(as.character(Sub_metering_3)),col="blue"))
+legend("topright", lty=1, col = c("black", "red", "blue"), legend = c("Sub_metering_1", "Sub_metering_2", "Sub_metering_3"))
+
+#plot4
